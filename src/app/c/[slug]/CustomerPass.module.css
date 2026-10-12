@@ -18,32 +18,31 @@
 }
 
 .logoBadge {
-  width: 54px;
-  height: 54px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--brand-primary) 0%, rgba(20, 24, 36, 0.9) 120%);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #ffffff;
-  box-shadow: 0 8px 24px -4px var(--brand-glow);
+  font-size: 1.5rem;
+  font-weight: 900;
   margin-bottom: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
 }
 
 .shopTitle {
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: 0.2rem;
 }
 
 .shopSubtitle {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 /* Card Surface */
@@ -57,12 +56,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .cardSurfaceUnlocked {
-  border-color: var(--reward-gold);
-  box-shadow: 0 0 35px -5px rgba(251, 191, 36, 0.3), var(--shadow-card);
+  border-color: #ffffff;
+  box-shadow: 0 0 35px -5px rgba(255, 255, 255, 0.25), var(--shadow-card);
 }
 
 .cardGlowTop {
@@ -70,12 +69,14 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: var(--brand-gradient);
+  height: 2px;
+  background: #ffffff;
 }
 
 .cardGlowTopUnlocked {
-  background: linear-gradient(90deg, #f59e0b, #10b981, #f59e0b);
+  height: 3px;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff;
 }
 
 .statusBar {
@@ -99,11 +100,11 @@
   font-family: var(--font-mono);
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--brand-primary);
-  background: rgba(var(--brand-primary-rgb), 0.12);
+  color: #ffffff;
+  background: var(--bg-surface-elevated);
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(var(--brand-primary-rgb), 0.25);
+  border: 1px solid var(--border-highlight);
 }
 
 /* Punch Grid */
@@ -121,12 +122,12 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .slotEmpty {
   border: 1.5px dashed var(--border-highlight);
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
   color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 600;
@@ -134,15 +135,17 @@
 }
 
 .slotFilled {
-  background: var(--brand-gradient);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  box-shadow: 0 4px 14px -2px var(--brand-glow), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.25);
+  font-weight: 900;
 }
 
 .slotFilledUnlocked {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 4px 14px -2px var(--reward-emerald-glow);
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
 }
 
 .slotIcon {
@@ -152,7 +155,7 @@
 
 /* Reward Banner */
 .rewardBanner {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 1rem;
@@ -163,20 +166,22 @@
 }
 
 .rewardBannerUnlocked {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(16, 185, 129, 0.12) 100%);
-  border-color: rgba(251, 191, 36, 0.4);
-  animation: pulseGlow 3s infinite ease-in-out;
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
 }
 
 .rewardHeadline {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .rewardHeadlineUnlocked {
-  color: #fde047;
+  color: #000000;
   font-size: 1.05rem;
+  font-weight: 800;
 }
 
 .rewardDetail {
@@ -202,31 +207,29 @@
 }
 
 .phoneInput {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-highlight);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   padding: 0.9rem 1rem;
   font-size: 1.25rem;
   font-family: var(--font-mono);
   text-align: center;
-  color: var(--text-primary);
+  color: #ffffff;
   letter-spacing: 0.05em;
   transition: border-color 0.2s;
 }
 
 .phoneInput:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.2);
+  border-color: #ffffff;
 }
 
 .primaryBtn {
-  background: var(--brand-gradient);
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
   font-weight: 700;
   font-size: 1rem;
   padding: 0.95rem 1.25rem;
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 18px -2px var(--brand-glow);
+  border-radius: var(--radius-sm);
   width: 100%;
   display: flex;
   align-items: center;
@@ -235,14 +238,12 @@
 }
 
 .primaryBtn:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
+  background: #e4e4e7;
 }
 
 .primaryBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  transform: none;
 }
 
 .footerInfo {
@@ -263,5 +264,5 @@
 }
 
 .switchNumberBtn:hover {
-  color: var(--text-primary);
+  color: #ffffff;
 }

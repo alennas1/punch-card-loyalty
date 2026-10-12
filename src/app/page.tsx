@@ -1,108 +1,261 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import {
+  getCurrentSession,
+  loginMerchant,
+  registerMerchant,
+  DEMO_USER_1,
+  DEMO_USER_2,
+  DEMO_USER_ALIAS,
+} from '@/lib/auth';
+import { AuthSession } from '@/types/auth';
 import styles from './Home.module.css';
 
 export default function HomePage() {
-  const demoShops = [
-    {
-      slug: 'cafe-central',
-      name: 'Café Central',
-      color: '#D97706',
-      target: 10,
-      reward: '1 Free Artisan Cappuccino',
-      pin: '1234',
-    },
-    {
-      slug: 'gelato-paradiso',
-      name: 'Gelato Paradiso',
-      color: '#EC4899',
-      target: 8,
-      reward: '2 Free Waffle Scoops',
-      pin: '5678',
-    },
-  ];
+  const router = useRouter();
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    const active = getCurrentSession();
+    if (active) {
+      setSession(active);
+    }
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+
+    if (authMode === 'login') {
+      const res = loginMerchant(email, password);
+      if (res.success && res.user) {
+        router.push('/dashboard');
+      } else {
+        setErrorMsg(res.error || 'Authentication failed.');
+      }
+    } else {
+      const res = registerMerchant(email, password, businessName);
+      if (res.success && res.user) {
+        router.push('/dashboard');
+      } else {
+        setErrorMsg(res.error || 'Registration failed.');
+      }
+    }
+  };
+
+  const handleQuickDemo = (demoEmail: string, demoPass: string) => {
+    const res = loginMerchant(demoEmail, demoPass);
+    if (res.success) {
+      router.push('/dashboard');
+    }
+  };
 
   return (
-    <div className={styles.homeWrapper}>
-      <header className={styles.hero}>
-        <div className={styles.badge}>⚡ Zero-Friction Multi-Tenant Loyalty</div>
-        <h1 className={styles.title}>Digital Punch Card Platform</h1>
-        <p className={styles.subtitle}>
-          No app downloads. No customer passwords. Zero POS hardware.
-          Customers scan counter QR codes, enter their phone number once, and collect rewards.
-        </p>
-      </header>
+    <div className={styles.container}>
+      {/* Top Navbar */}
+      <nav className={styles.nav}>
+        <div className={styles.logo}>
+          <div className={styles.logoIcon}>P</div>
+          <span>STAMPCARD</span>
+        </div>
 
-      <section>
-        <h2 className={styles.sectionTitle}>
-          <span>🏪</span> Active Merchant Demonstrations
-        </h2>
-        <div className={styles.demoGrid}>
-          {demoShops.map((shop) => (
-            <div key={shop.slug} className={styles.demoCard}>
-              <div className={styles.demoCardHeader}>
-                <div className={styles.shopAvatar} style={{ background: shop.color }}>
-                  {shop.name.charAt(0)}
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>{shop.name}</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    Slug: <code>/{shop.slug}</code>
-                  </p>
-                </div>
-              </div>
+        <div>
+          {session ? (
+            <Link href="/dashboard" className={`${styles.navBtn} ${styles.navBtnPrimary}`}>
+              Dashboard →
+            </Link>
+          ) : (
+            <button
+              onClick={() => {
+                setAuthMode('login');
+                const el = document.getElementById('auth-card');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`${styles.navBtn} ${styles.navBtnPrimary}`}
+            >
+              Merchant Login
+            </button>
+          )}
+        </div>
+      </nav>
 
-              <div className={styles.demoDetails}>
-                <p>
-                  <strong>Target Rule:</strong> {shop.target} stamps → {shop.reward}
-                </p>
-                <p style={{ marginTop: '0.25rem' }}>
-                  <strong>Cashier PIN:</strong> <code>{shop.pin}</code>
-                </p>
-              </div>
+      {/* Hero with Auth Split */}
+      <section className={styles.heroSplit}>
+        <div className={styles.heroContent}>
+          <div className={styles.tagline}>Zero-Friction Customer Loyalty</div>
+          <h1 className={styles.headline}>
+            Digital punch cards.<br />
+            No apps. No passwords.
+          </h1>
+          <p className={styles.subheadline}>
+            Customers scan your counter QR code and enter their phone number once.
+            Cashiers stamp from any phone or tablet behind the counter with a 4-digit PIN.
+          </p>
 
-              <div className={styles.buttonPair}>
-                <Link
-                  href={`/c/${shop.slug}`}
-                  className={styles.actionLinkCustomer}
-                  id={`link-customer-${shop.slug}`}
-                >
-                  📱 Customer Pass
-                </Link>
-                <Link
-                  href={`/k/${shop.slug}`}
-                  className={styles.actionLinkCashier}
-                  style={{ background: shop.color }}
-                  id={`link-cashier-${shop.slug}`}
-                >
-                  💳 Cashier Terminal
-                </Link>
-              </div>
+          <div className={styles.featureList}>
+            <div className={styles.featureItem}>
+              <div className={styles.featureBullet} />
+              <span>Instant customer pass stored directly in browser memory</span>
             </div>
-          ))}
+            <div className={styles.featureItem}>
+              <div className={styles.featureBullet} />
+              <span>Multi-tenant cash register terminals with 4-digit PIN security</span>
+            </div>
+            <div className={styles.featureItem}>
+              <div className={styles.featureBullet} />
+              <span>Zero POS hardware required — runs on existing shop devices</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Auth Box */}
+        <div className={styles.authCard} id="auth-card">
+          <div className={styles.tabRow}>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${authMode === 'login' ? styles.tabBtnActive : ''}`}
+              onClick={() => {
+                setAuthMode('login');
+                setErrorMsg(null);
+              }}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${authMode === 'register' ? styles.tabBtnActive : ''}`}
+              onClick={() => {
+                setAuthMode('register');
+                setErrorMsg(null);
+              }}
+            >
+              Create Account
+            </button>
+          </div>
+
+          {errorMsg && <div className={styles.errorBanner}>{errorMsg}</div>}
+
+          <form onSubmit={handleSubmit}>
+            {authMode === 'register' && (
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Business Name</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Café Central"
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  className={styles.input}
+                  required
+                />
+              </div>
+            )}
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Email Address</label>
+              <input
+                type="email"
+                placeholder="name@business.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.input}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.input}
+                required
+              />
+            </div>
+
+            <button type="submit" className={styles.submitBtn}>
+              {authMode === 'login' ? 'Sign In to Dashboard' : 'Create Merchant Account'}
+            </button>
+          </form>
+
+          {/* 1-Click Quick Demo Login matching qrmaker-dz */}
+          <div className={styles.demoBox}>
+            <div className={styles.demoTitle}>Quick Demo Logins (qrmaker-dz)</div>
+            <button
+              type="button"
+              className={styles.demoChip}
+              onClick={() => handleQuickDemo(DEMO_USER_1.email, DEMO_USER_1.passwordHash)}
+            >
+              <span>{DEMO_USER_1.email}</span>
+              <span className={styles.demoChipAction}>Login →</span>
+            </button>
+            <button
+              type="button"
+              className={styles.demoChip}
+              onClick={() => handleQuickDemo(DEMO_USER_2.email, DEMO_USER_2.passwordHash)}
+            >
+              <span>{DEMO_USER_2.email}</span>
+              <span className={styles.demoChipAction}>Login →</span>
+            </button>
+            <button
+              type="button"
+              className={styles.demoChip}
+              onClick={() => handleQuickDemo(DEMO_USER_ALIAS.email, DEMO_USER_ALIAS.passwordHash)}
+            >
+              <span>{DEMO_USER_ALIAS.email}</span>
+              <span className={styles.demoChipAction}>Login →</span>
+            </button>
+          </div>
         </div>
       </section>
 
-      <section className={styles.guideBox}>
-        <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-          🚀 5-Minute Client Onboarding Workflow
-        </h2>
-        <div className={styles.stepList}>
-          <div className={styles.stepItem}>
-            <div className={styles.stepNumber}>1</div>
-            <div>
-              <strong>Database Record:</strong> Insert one line in Neon with shop slug, cashier PIN, target stamp count, and reward prize.
+      {/* Live Punch Card Prototypes */}
+      <section>
+        <h2 className={styles.sectionTitle}>Live Merchant Demonstrations</h2>
+        <div className={styles.demoCardsGrid}>
+          <div className={styles.shopCard}>
+            <div className={styles.shopCardHeader}>
+              <div className={styles.shopCardName}>Café Central</div>
+              <span className={styles.shopCardBadge}>PIN: 1234</span>
+            </div>
+            <p className={styles.shopCardRule}>
+              Target: 10 stamps → 1 Free Artisan Cappuccino
+            </p>
+            <div className={styles.shopLinks}>
+              <Link href="/c/cafe-central" className={styles.btnPass}>
+                📱 Customer Pass
+              </Link>
+              <Link href="/k/cafe-central" className={styles.btnTerminal}>
+                💳 Cashier Terminal
+              </Link>
             </div>
           </div>
-          <div className={styles.stepItem}>
-            <div className={styles.stepNumber}>2</div>
-            <div>
-              <strong>Print Counter QR:</strong> Generate a QR code pointing directly to <code>/c/[shop-slug]</code> and place it at checkout.
+
+          <div className={styles.shopCard}>
+            <div className={styles.shopCardHeader}>
+              <div className={styles.shopCardName}>Gelato Paradiso</div>
+              <span className={styles.shopCardBadge}>PIN: 5678</span>
             </div>
-          </div>
-          <div className={styles.stepItem}>
-            <div className={styles.stepNumber}>3</div>
-            <div>
-              <strong>Cashier Terminal:</strong> Give the merchant their counter link <code>/k/[shop-slug]</code> and 4-digit PIN.
+            <p className={styles.shopCardRule}>
+              Target: 8 stamps → 2 Free Waffle Scoops
+            </p>
+            <div className={styles.shopLinks}>
+              <Link href="/c/gelato-paradiso" className={styles.btnPass}>
+                📱 Customer Pass
+              </Link>
+              <Link href="/k/gelato-paradiso" className={styles.btnTerminal}>
+                💳 Cashier Terminal
+              </Link>
             </div>
           </div>
         </div>

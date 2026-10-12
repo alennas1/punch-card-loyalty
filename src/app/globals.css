@@ -4,38 +4,39 @@
   --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Premium Obsidian & Velvet Color Tokens */
-  --bg-core: #090a0f;
-  --bg-surface: #12141c;
-  --bg-surface-elevated: #1a1e2b;
-  --bg-glass: rgba(22, 26, 38, 0.7);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(255, 255, 255, 0.16);
+  /* Luxury Minimalist Monochrome Tokens */
+  --bg-core: #09090b;
+  --bg-surface: #121214;
+  --bg-surface-elevated: #18181b;
+  --bg-glass: rgba(18, 18, 20, 0.85);
 
-  /* Typography */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --border-subtle: #27272a;
+  --border-highlight: #3f3f46;
+  --border-strong: #71717a;
 
-  /* Default Brand Accents (Dynamically overridden per shop) */
-  --brand-primary: #d97706;
-  --brand-primary-rgb: 217, 119, 6;
-  --brand-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  --brand-glow: rgba(245, 158, 11, 0.35);
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
 
-  /* Loyalty States */
-  --reward-gold: #fbbf24;
-  --reward-emerald: #10b981;
-  --reward-emerald-glow: rgba(16, 185, 129, 0.4);
+  /* Monochrome Accent Tokens */
+  --brand-primary: #ffffff;
+  --brand-primary-rgb: 255, 255, 255;
+  --brand-contrast: #000000;
+  --brand-gradient: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
+  --brand-glow: rgba(255, 255, 255, 0.18);
+
+  /* Loyalty States in Monochrome */
+  --reward-silver: #f4f4f5;
+  --reward-glow: rgba(255, 255, 255, 0.3);
   --danger-crimson: #ef4444;
 
   /* Layout */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-full: 9999px;
-  --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 2px 1px rgba(255, 255, 255, 0.06);
-  --shadow-neon: 0 0 30px -5px var(--brand-glow);
+  --shadow-card: 0 16px 36px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--border-subtle);
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -56,8 +57,7 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(circle at 50% 0%, rgba(30, 38, 58, 0.6) 0%, #090a0f 80%);
-  background-attachment: fixed;
+  background-color: var(--bg-core);
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -73,7 +73,7 @@ button {
   cursor: pointer;
   border: none;
   background: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input {
@@ -82,24 +82,22 @@ input {
   outline: none;
 }
 
-/* Glassmorphism Panel */
+/* Monochrome Glass Panel */
 .glass-panel {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
 
-/* Interactive Ripple & Micro-animations */
+/* Animations */
 @keyframes stampPop {
   0% {
-    transform: scale(0.4) rotate(-15deg);
+    transform: scale(0.6) rotate(-8deg);
     opacity: 0;
   }
-  70% {
-    transform: scale(1.15) rotate(4deg);
+  75% {
+    transform: scale(1.08) rotate(2deg);
     opacity: 1;
   }
   100% {
@@ -107,63 +105,19 @@ input {
   }
 }
 
-@keyframes pulseGlow {
+@keyframes monochromeGlow {
   0%, 100% {
-    box-shadow: 0 0 20px var(--brand-glow), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.12), inset 0 0 10px rgba(255, 255, 255, 0.05);
   }
   50% {
-    box-shadow: 0 0 35px var(--brand-glow), inset 0 0 25px rgba(255, 255, 255, 0.2);
-  }
-}
-
-@keyframes rewardBadgeBounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.22), inset 0 0 20px rgba(255, 255, 255, 0.12);
   }
 }
 
 .animate-stamp {
-  animation: stampPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: stampPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 2.5s infinite ease-in-out;
-}
-
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-/* Utility Containers */
-.container-narrow {
-  width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
-}
-
-.container-terminal {
-  width: 100%;
-  max-width: 580px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
+.animate-glow {
+  animation: monochromeGlow 3s infinite ease-in-out;
 }
